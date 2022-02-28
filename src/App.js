@@ -1,9 +1,15 @@
 import './App.css'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import Title from './components/Title'
+import Modal from './components/Modal'
+import EventList from './components/EventList';
 
 function App() {
+  // Modal state 
+  const [showModal, setShowModal] = useState(false);
+
   // Boolean state initilization
-  const [showEvents, setShowEvents] = useState(true)
+  const [showEvents, setShowEvents] = useState(false)
 
   // Declaring state for events
   const [events, setEvents] = useState([
@@ -27,20 +33,29 @@ function App() {
     console.log(id)
   }
 
+  const handleClose = () => {
+    setShowModal(false)
+  }
 
+  const subtitle = "All of Prince's events here!"
   return (
     <div className="App">
+      {/* Passing prop into component */}
+      <Title 
+        title="Listed Events"
+        subtitle={subtitle}
+      />
 
       {showEvents && (
-        <div>
+        <>
         <button onClick={() => setShowEvents(false)}>Hide Events</button>
-      </div>
+      </>
       )}
 
       {!showEvents && (
-        <div>
+        <>
         <button onClick={() => setShowEvents(true)}>Show Events</button>
-      </div>
+      </>
       )}
 
       {/* Conditional && template for displaying the events when 
@@ -49,13 +64,25 @@ function App() {
           and displaying it in a JSX template. 
           Mapping through always needs a key value for the 
           child element*/}
-      {showEvents && events.map((event, index) => (
-        <div key={event.id}>
-          <h2>{index} - {event.title}</h2>
-          {/* Deleting an event from the list by updating its state */}
-          <button onClick={() => handleClick(event.id)}>Delete Event</button>
-        </div>
-      ))}
+      {showEvents && <EventList 
+            handleClick={handleClick}
+            events={events}
+            
+      />}
+
+      {/* <Modal>
+        <h2>Download CV</h2>
+        <p>Get a copy of my CV here!</p>
+      </Modal> */}
+      {showModal && <Modal handleClose={handleClose}>
+        <h2>Terms and Conditions</h2>
+        <p>Lorem Ipsum is simply dummy text of the 
+        printing and typesetting industry. Lorem Ipsum 
+        has been the industry's standard dummy text ever 
+        since the 1500s, when an unknown </p>
+      </Modal>
+      }
+      <button onClick={() => setShowModal(true)}>Show Modal</button>
     </div>
   );
 }
