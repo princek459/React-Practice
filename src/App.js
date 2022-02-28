@@ -5,7 +5,7 @@ function App() {
 
   // Use state to declare the initial state for name
   const [name, setName] = useState('Mario')
-  // Declaring state for lists
+  // Declaring state for lists 
   const [events, setEvents] = useState([
     {title: "Princes lists of things", id: 1},
     {title: "Another list item lol", id: 2},
