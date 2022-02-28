@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Title from './components/Title'
 import Modal from './components/Modal'
 import EventList from './components/EventList';
+import NewEventForm from './components/NewEventForm';
 
 function App() {
   // Modal state 
@@ -12,14 +13,21 @@ function App() {
   const [showEvents, setShowEvents] = useState(false)
 
   // Declaring state for events
-  const [events, setEvents] = useState([
-    {title: "Princes lists of things", id: 1},
-    {title: "Another list item lol", id: 2},
-    {title: "Really imaginative arent i", id: 3}
-  ])
+  const [events, setEvents] = useState([])
 
-  console.log(showEvents)
 
+  // Function to add a new event to the empty array of events
+  const addEvent  =(event) => {
+    setEvents((prevEvents) => {
+      // Using the prev state as an argument and sreading the new 
+      // event in that array
+      return [...prevEvents, event]
+    })
+    // Hiding the modal after a new event gets added.
+    setShowModal(false)
+  }
+
+  // Function to handle the click on the delete button
   const handleClick = (id) => {
     // Updating the state of the event by using .filter()
     // .filter() returns a new array and keeps old array unchanged
@@ -33,29 +41,28 @@ function App() {
     console.log(id)
   }
 
-  const handleClose = () => {
-    setShowModal(false)
-  }
 
   const subtitle = "All of Prince's events here!"
+
+  
   return (
     <div className="App">
       {/* Passing prop into component */}
-      <Title 
+      <Title
         title="Listed Events"
         subtitle={subtitle}
       />
 
       {showEvents && (
         <>
-        <button onClick={() => setShowEvents(false)}>Hide Events</button>
-      </>
+          <button onClick={() => setShowEvents(false)}>Hide Events</button>
+        </>
       )}
 
       {!showEvents && (
         <>
-        <button onClick={() => setShowEvents(true)}>Show Events</button>
-      </>
+          <button onClick={() => setShowEvents(true)}>Show Events</button>
+        </>
       )}
 
       {/* Conditional && template for displaying the events when 
@@ -64,25 +71,21 @@ function App() {
           and displaying it in a JSX template. 
           Mapping through always needs a key value for the 
           child element*/}
-      {showEvents && <EventList 
-            handleClick={handleClick}
-            events={events}
-            
-      />}
+      {showEvents && <EventList
+        handleClick={handleClick}
+        events={events}
 
-      {/* <Modal>
-        <h2>Download CV</h2>
-        <p>Get a copy of my CV here!</p>
-      </Modal> */}
-      {showModal && <Modal handleClose={handleClose}>
-        <h2>Terms and Conditions</h2>
-        <p>Lorem Ipsum is simply dummy text of the 
-        printing and typesetting industry. Lorem Ipsum 
-        has been the industry's standard dummy text ever 
-        since the 1500s, when an unknown </p>
-      </Modal>
-      }
-      <button onClick={() => setShowModal(true)}>Show Modal</button>
+      />}
+      {showModal && (
+        <Modal isSalesModal={true}>
+          <NewEventForm addEvent={addEvent} />
+        </Modal>
+        )}
+
+      <div>
+        <button onClick={() => setShowModal(true)}>Add New Event</button>
+      </div>
+
     </div>
   );
 }
